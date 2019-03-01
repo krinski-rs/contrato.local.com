@@ -1,0 +1,3 @@
+pdv:
+    prefix: /pdv
+    resource: './pdv/routes.yaml'

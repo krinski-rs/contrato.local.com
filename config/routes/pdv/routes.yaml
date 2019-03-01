@@ -1,0 +1,49 @@
+post_pdv:
+    path: /
+    controller: 'App\Controller\Pdvs\PdvController::postPdv'
+    methods: [POST]
+    defaults:
+        _format: json
+        
+get_pdv:
+    path: /{idPdv}
+    controller: 'App\Controller\Pdvs\PdvController::getPdv'
+    methods: [GET]
+    defaults:
+        _format: json
+    requirements:
+        idPdv: '\d+'
+        
+list_pdv:
+    path: /
+    controller: 'App\Controller\Pdvs\PdvController::getPdvs'
+    methods: [GET]
+    defaults:
+        _format: json
+        
+delete_pdv:
+    path: /{idPdv}
+    controller: 'App\Controller\Pdvs\PdvController::deletePdv'
+    methods: [DELETE]
+    defaults:
+        _format: json
+    requirements:
+        idPdv: '\d+'
+        
+put_pdv:
+    path: /{idPdv}
+    controller: 'App\Controller\Pdvs\PdvController::putPdv'
+    methods: [PUT]
+    defaults:
+        _format: json
+    requirements:
+        idPdv: '\d+'
+        
+patch_pdv:
+    path: /{idPdv}
+    controller: 'App\Controller\Pdvs\PdvController::patchPdv'
+    methods: [PATCH]
+    defaults:
+        _format: json
+    requirements:
+        idPdv: '\d+'

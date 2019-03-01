@@ -1,0 +1,30 @@
+App\Entity\Nutri\PontoVenda:
+    type: entity
+    table: nutri.ponto_venda
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: SEQUENCE
+    fields:
+        nome:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        dataCadastro:
+            type: datetime
+            nullable: false
+            column: data_cadastro
+        ativo:
+            type: boolean
+            nullable: false
+        removido:
+            type: boolean
+            nullable: false
+    lifecycleCallbacks: {  }

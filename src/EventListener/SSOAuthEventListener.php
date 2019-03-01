@@ -20,9 +20,11 @@ class SSOAuthEventListener
     private $objAuthExceptions          = NULL;
     private $objSSoClient               = NULL;
     private $objParameterBagInterface   = NULL;
+    private $corsParameters             = NULL;
     
-    public function __construct(Logger $objLogger, AuthExceptions $objAuthExceptions, SSOClient $objSSoClient, ParameterBagInterface $objParameterBagInterface)
+    public function __construct($cors, Logger $objLogger, AuthExceptions $objAuthExceptions, SSOClient $objSSoClient, ParameterBagInterface $objParameterBagInterface)
     {
+        $this->corsParameters           = $cors;
         $this->objLogger                = $objLogger;
         $this->objAuthExceptions        = $objAuthExceptions;
         $this->objSSoClient             = $objSSoClient;
@@ -31,26 +33,44 @@ class SSOAuthEventListener
     
     public function onKernelRequest(GetResponseEvent $objGetResponseEvent)
     {
-        try {
-            if ($objGetResponseEvent->getRequestType() !== HttpKernel::MASTER_REQUEST) {
-                return;
-            }
-            
-            if (in_array($objGetResponseEvent->getRequest()->get('_route'), ['login', 'auth'])) {
-                return;
-            }
-            
-            $allowAccess = $this->objAuthExceptions->allowUnauthorizedAccess($_SERVER['REMOTE_ADDR'], $objGetResponseEvent->getRequest()->get('_route'));
-            if ($allowAccess || $this->objSSoClient->isLoggedIn()) {
-                return;
-            }
-            
-            if(!$this->objSSoClient->me()){
-                throw new \Exception('Erro de login.');
-            }
-        } catch (\Exception $e) {
-            $this->setRedirectToLoginResponse($objGetResponseEvent);
+        /*
+         * Não faça nada se não for o MASTER_REQUEST
+         */
+        if (HttpKernelInterface::MASTER_REQUEST !== $objGetResponseEvent->getRequestType()) {
+            return;
         }
+        $objRequest = $objGetResponseEvent->getRequest();
+        $method  = $objRequest->getRealMethod();
+        if ('OPTIONS' === strtoupper($method)) {
+            $objResponse = new Response();
+            $allowed_origin = array_search($objRequest->headers->get('origin'), $this->corsParameters['allowed_origin']);
+            $objResponse->headers->set('Access-Control-Allow-Origin', trim($this->corsParameters['allowed_origin'][$allowed_origin]));
+            $objResponse->headers->set('Access-Control-Allow-Credentials', 'true');
+            $objResponse->headers->set('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE,PATCH,OPTIONS');
+            $objResponse->headers->set('Access-Control-Allow-Headers', implode(",", $this->corsParameters['allowed_headers']));
+            $objResponse->headers->set('Access-Control-Max-Age', 3600);
+            $objGetResponseEvent->setResponse($objResponse);
+            return ;
+        }
+        
+        if ($objRequest->headers->get('content-type') == 'application/json') {
+            $data = json_decode($objGetResponseEvent->getRequest()->getContent(), true);
+            $total = 0;
+            if(count($data)){
+                reset($data);
+                while($total < count($data)){
+                    $dado = current($data);
+                    $objRequest->attributes->set(key($data), $dado);
+                    $total++;
+                    next($data);
+                }
+            }
+        }
+        
+        if(!$this->objSSoClient->me()){
+            throw new \Exception('Erro de login.');
+        }
+        
     }
     
     private function setRedirectToLoginResponse(GetResponseEvent $objGetResponseEvent)
@@ -60,8 +80,7 @@ class SSOAuthEventListener
             $data = array("msg" => "Você precisa estar logado para realizar esta ação");
             $response = new JsonResponse($data, 403);
         } else {
-//             $response = new RedirectResponse('/login', 302);
-            $response = new Response("Você precisa estar logado para realizar esta ação", Response::HTTP_UNAUTHORIZED);
+            $response = new RedirectResponse('/login', 302);
         }
         $objGetResponseEvent->setResponse($response);
         $objGetResponseEvent->stopPropagation();
@@ -69,21 +88,22 @@ class SSOAuthEventListener
     
     public function onKernelResponse(FilterResponseEvent $objFilterResponseEvent)
     {
-        $request = $objFilterResponseEvent->getRequest();
+        $objRequest = $objFilterResponseEvent->getRequest();
         /*
          * Execute o CORS aqui para garantir que o domínio esteja no sistema
          */
-        
+       
         //if (in_array($request->headers->get('origin'), $this->cors)) {
         if (HttpKernelInterface::MASTER_REQUEST !== $objFilterResponseEvent->getRequestType()) {
             return;
         }
         
+        $allowed_origin = array_search($objRequest->headers->get('origin'), $this->corsParameters['allowed_origin']);
         $objResponse = $objFilterResponseEvent->getResponse();
-        $objResponse->headers->set('Access-Control-Allow-Origin', '*');
+        $objResponse->headers->set('Access-Control-Allow-Origin', trim($this->corsParameters['allowed_origin'][$allowed_origin]));
         $objResponse->headers->set('Access-Control-Allow-Credentials', 'true');
         $objResponse->headers->set('Access-Control-Allow-Methods', 'POST,GET,PUT,DELETE,PATCH,OPTIONS');
-        $objResponse->headers->set('Access-Control-Allow-Headers', implode(",", $this->objParameterBagInterface->get('cors')['allowed_headers']));
+        $objResponse->headers->set('Access-Control-Allow-Headers', implode(",", $this->corsParameters['allowed_headers']));
     }
 }
 
