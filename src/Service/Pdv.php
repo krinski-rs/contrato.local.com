@@ -1,10 +1,10 @@
 <?php
-namespace App\Service\Pdvs;
+namespace App\Service;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpFoundation\Request;
-// use App\Service\Pdvs\Pdv\Create;
-// use App\Service\Pdvs\Pdv\Listing;
+use App\Service\Pdv\Create;
+use App\Service\Pdv\Listing;
 use Monolog\Logger;
 
 class Pdv
@@ -21,9 +21,9 @@ class Pdv
     public function create(Request $objRequest)
     {
         try {
-//             $objPdvsPdvCreate = new Create($this->objEntityManager, $this->objLogger);
-//             $objPdvsPdvCreate->create($objRequest);
-//             return $objPdvsPdvCreate->save();
+            $objPdvCreate = new Create($this->objEntityManager, $this->objLogger);
+            $objPdvCreate->create($objRequest);
+            return $objPdvCreate->save();
         } catch (\RuntimeException $e){
             throw $e;
         } catch (\Exception $e){
@@ -46,8 +46,8 @@ class Pdv
     public function list(Request $objRequest)
     {
         try {
-//             $objPdvsPdvListing = new Listing($this->objEntityManager);
-//             return $objPdvsPdvListing->list($objRequest);
+            $objPdvsPdvListing = new Listing($this->objEntityManager);
+            return $objPdvsPdvListing->list($objRequest);
         } catch (\RuntimeException $e){
             throw $e;
         } catch (\Exception $e){
