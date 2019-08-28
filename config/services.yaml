@@ -78,5 +78,17 @@ services:
             $objPdv: '@pdvs.pdv'
           
 
+    localidade.localidade:
+          alias: App\Service\Localidade
+          public: true
+
+    App\Service\Localidade:
+          public: false
+          arguments: ["@doctrine", "@logger"]
+          
+    App\Controller\Localidade\LocalidadeController:
+        arguments:
+            $objLocalidade: '@localidade.localidade'
+
            
     

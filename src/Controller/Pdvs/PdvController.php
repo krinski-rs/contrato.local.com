@@ -37,34 +37,14 @@ class PdvController extends AbstractController
         }
     }
     
-    public function getPdv(int $idPdv)
+    public function getPdv(Request $objRequest, int $idPdv)
     {
         try {
             if(!$this->objPdv instanceof Pdv){
                 return new JsonResponse(['message'=> 'Class "App\Service\Pdv not found."'], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-            
-            $objPdv = $objPdvsPdv->get($idPdv);
-            $encoders = array(new XmlEncoder(), new JsonEncoder());
-            
-            $objObjectNormalizer = new ObjectNormalizer();
-        
-            $objObjectNormalizer->setCircularReferenceHandler(function (PontoVenda $objPontoVenda) {
-                return $objPdv->getId();
-            });
-        
-            $callbackDateTime = function ($dateTime) {
-                return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
-            };
-                
-            $objObjectNormalizer->setCallbacks(array('dataCadastro' => $callbackDateTime, 'dataAniversario' => $callbackDateTime));
-            $objObjectNormalizer->setCircularReferenceLimit(1);
-            $normalizers = array($objObjectNormalizer);
-            
-            $objSerializer = new Serializer($normalizers, $encoders);
-            return new JsonResponse($objSerializer->normalize($objPdv, 'json'), Response::HTTP_OK);
+            $objPdv = $this->objPdv->get($idPdv);
+            return new JsonResponse($objPdv, Response::HTTP_OK);
         } catch (\RuntimeException $e) {
             return new JsonResponse(['mensagem'=>$e->getMessage()], Response::HTTP_PRECONDITION_FAILED);
         } catch (\Exception $e) {
@@ -84,7 +64,7 @@ class PdvController extends AbstractController
             
             $objObjectNormalizer = new ObjectNormalizer();
             $objObjectNormalizer->setCircularReferenceHandler(function (PontoVenda $objPontoVenda) {
-                return $objPdv->getId();
+                return $objPontoVenda->getId();
             });
             
             $callbackDateTime = function ($dateTime) {

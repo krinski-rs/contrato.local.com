@@ -1,0 +1,10 @@
+pais:
+    prefix: /pais
+    resource: './pais.yaml'
+estado:
+    prefix: /estado
+    resource: './estado.yaml'
+cidade:
+    prefix: /cidade
+    resource: './cidade.yaml'
+    

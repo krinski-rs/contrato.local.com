@@ -1,0 +1,15 @@
+get_cidade:
+    path: /{cidadeId}
+    controller: 'App\Controller\Localidade\LocalidadeController::getCidade'
+    methods: [GET]
+    defaults:
+        _format: json
+    requirements:
+        estadoId: '\d+'
+list_cidade:
+    path: /
+    controller: 'App\Controller\Localidade\LocalidadeController::getCidades'
+    methods: [GET]
+    defaults:
+        _format: json
+        

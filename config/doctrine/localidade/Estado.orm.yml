@@ -1,0 +1,41 @@
+App\Entity\Localidade\Estado:
+    type: entity
+    table: localidade.estado
+    indexes:
+        IDX_B42BA6A4C604D5C6:
+            columns:
+                - pais_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: SEQUENCE
+    fields:
+        nome:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        sigla:
+            type: string
+            nullable: false
+            length: 3
+            options:
+                fixed: false
+    manyToOne:
+        pais:
+            targetEntity: App\Entity\Localidade\Pais
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                pais_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

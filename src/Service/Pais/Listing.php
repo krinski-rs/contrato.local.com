@@ -1,5 +1,5 @@
 <?php
-namespace App\Service\Pdv;
+namespace App\Service\Pais;
 
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
@@ -13,11 +13,11 @@ class Listing
         $this->objEntityManager = $objEntityManager;
     }
     
-    public function get(int $idPessoa)
+    public function get(int $idPais)
     {
         try {
-            $objRepositoryPontoVenda = $this->objEntityManager->getRepository('App\Entity\Nutri\PontoVenda');
-            return $objRepositoryPontoVenda->find($idPessoa);
+            $objRepositoryPais = $this->objEntityManager->getRepository('App\Entity\Localidade\Pais');
+            return $objRepositoryPais->find($idPais);
         } catch (\RuntimeException $e){
             throw $e;
         } catch (\Exception $e){
@@ -28,8 +28,8 @@ class Listing
     public function list(Request $objRequest)
     {
         try {
-            $objRepositoryPontoVenda = $this->objEntityManager->getRepository('App\Entity\Nutri\PontoVenda');
-            return $objRepositoryPontoVenda->findAll();
+            $objRepositoryPais = $this->objEntityManager->getRepository('App\Entity\Localidade\Pais');
+            return $objRepositoryPais->findAll();
         } catch (\RuntimeException $e){
             throw $e;
         } catch (\Exception $e){

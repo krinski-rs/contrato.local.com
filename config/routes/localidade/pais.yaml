@@ -1,0 +1,15 @@
+get_pais:
+    path: /{paisId}
+    controller: 'App\Controller\Localidade\LocalidadeController::getNacao'
+    methods: [GET]
+    defaults:
+        _format: json
+    requirements:
+        paisId: '\d+'
+list_pais:
+    path: /
+    controller: 'App\Controller\Localidade\LocalidadeController::getPais'
+    methods: [GET]
+    defaults:
+        _format: json
+        

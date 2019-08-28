@@ -1,6 +1,6 @@
-App\Entity\Nutri\PontoVenda:
+App\Entity\Localidade\Pais:
     type: entity
-    table: nutri.ponto_venda
+    table: localidade.pais
     id:
         id:
             type: integer
@@ -17,19 +17,10 @@ App\Entity\Nutri\PontoVenda:
             length: 255
             options:
                 fixed: false
-        dataCadastro:
-            type: datetime
+        sigla:
+            type: string
             nullable: false
-            column: data_cadastro
-        ativo:
-            type: boolean
-            nullable: false
-        removido:
-            type: boolean
-            nullable: false
-    oneToOne:
-        endereco:
-            targetEntity: App\Entity\Nutri\Endereco
-            cascade: [all]
-            mappedBy: pontoVenda
+            length: 5
+            options:
+                fixed: false
     lifecycleCallbacks: {  }

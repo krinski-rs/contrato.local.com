@@ -24,6 +24,17 @@ doctrine:
                 mapping_types:
                     point: point
                 schema_filter: '/^(nutri.)/'
+            localidade:
+                driver:   '%env(resolve:VOGEL_DRIVER)%'
+                host:     '%env(resolve:VOGEL_HOST)%'
+                port:     '%env(resolve:VOGEL_PORT)%'
+                dbname:   '%env(resolve:VOGEL_DBNAME)%'
+                user:     '%env(resolve:VOGEL_USER)%'
+                password: '%env(resolve:VOGEL_PASSWORD)%'
+                charset:  '%env(resolve:VOGEL_CHARSET)%'
+                mapping_types:
+                    point: point
+                schema_filter: '/^(localidade.)/'
     orm:
         default_entity_manager: default
         entity_managers:
@@ -36,3 +47,19 @@ doctrine:
                         dir: '%kernel.project_dir%/config/doctrine/nutri'
                         prefix: 'App\Entity\Nutri'
                         alias: App\Entity\Nutri
+                    Localidade:
+                        is_bundle: false
+                        type: yml
+                        dir: '%kernel.project_dir%/config/doctrine/localidade'
+                        prefix: 'App\Entity\Localidade'
+                        alias: App\Entity\Localidade
+            localidade:
+                connection: localidade
+                mappings:
+                    Localidade:
+                        is_bundle: false
+                        type: yml
+                        dir: '%kernel.project_dir%/config/doctrine/localidade'
+                        prefix: 'App\Entity\Localidade'
+                        alias: App\Entity\Localidade
+                        

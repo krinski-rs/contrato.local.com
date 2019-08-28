@@ -32,6 +32,11 @@ class PontoVenda
      */
     private $removido;
 
+    /**
+     * @var \App\Entity\Nutri\Endereco
+     */
+    private $endereco;
+
 
     /**
      * Get id.
@@ -137,5 +142,29 @@ class PontoVenda
     public function getRemovido()
     {
         return $this->removido;
+    }
+
+    /**
+     * Set endereco.
+     *
+     * @param \App\Entity\Nutri\Endereco|null $endereco
+     *
+     * @return PontoVenda
+     */
+    public function setEndereco(\App\Entity\Nutri\Endereco $endereco = null)
+    {
+        $this->endereco = $endereco;
+
+        return $this;
+    }
+
+    /**
+     * Get endereco.
+     *
+     * @return \App\Entity\Nutri\Endereco|null
+     */
+    public function getEndereco()
+    {
+        return $this->endereco;
     }
 }

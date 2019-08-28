@@ -2,6 +2,6 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-pessoa_api:
+api:
     prefix: /api
     resource: './routes/api.yaml'

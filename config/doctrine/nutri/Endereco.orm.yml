@@ -1,0 +1,107 @@
+App\Entity\Nutri\Endereco:
+    type: entity
+    table: nutri.endereco
+    indexes:
+        IDX_4A2742ACE7AF4262:
+            columns:
+                - ponto_venda_id
+        IDX_4A2742ACC604D5C6:
+            columns:
+                - pais_id
+        IDX_4A2742AC9F5A440B:
+            columns:
+                - estado_id
+        IDX_4A2742AC9586CC8:
+            columns:
+                - cidade_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: SEQUENCE
+    fields:
+        bairro:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        logradouro:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        numero:
+            type: string
+            nullable: false
+            length: 10
+            options:
+                fixed: false
+        complemento:
+            type: text
+            nullable: true
+            length: null
+            options:
+                fixed: false
+        point:
+            type: point
+            nullable: true
+            requireSQLConversion: true
+        ativo:
+            type: boolean
+            nullable: false
+            options:
+                default: true
+        dataCadastro:
+            type: datetime
+            nullable: false
+            options:
+                default: now()
+            column: data_cadastro
+    manyToOne:
+        pontoVenda:
+            targetEntity: App\Entity\Nutri\PontoVenda
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ponto_venda_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        pais:
+            targetEntity: App\Entity\Localidade\Pais
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                pais_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        estado:
+            targetEntity: App\Entity\Localidade\Estado
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                estado_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        cidade:
+            targetEntity: App\Entity\Localidade\Cidade
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                cidade_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
